@@ -19,7 +19,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique();
             $table->string('password');
             $table->string('api_token')->index();
-            $table->unsignedInteger('level');
+            $table->unsignedInteger('level')->default(1);
             $table->unsignedInteger('status')->comment('0-正常（默认） , 1-冻结');
             $table->string('avatar');
             // count

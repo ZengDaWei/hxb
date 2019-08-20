@@ -16,5 +16,4 @@ trait UserRepo
             'api_token' => Str::random(45),
         ]);
     }
-
 }

@@ -20,7 +20,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('api_token')->index();
             $table->unsignedInteger('level')->default(1);
-            $table->unsignedInteger('status')->comment('0-正常（默认） , 1-冻结');
+            $table->unsignedInteger('status')->default(0)->comment('0-正常（默认） , 1-冻结');
             $table->string('avatar');
             // count
             $table->unsignedInteger('count_fans')->default(0)->comment('粉丝数');

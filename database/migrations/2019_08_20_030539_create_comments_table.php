@@ -21,8 +21,8 @@ class CreateCommentsTable extends Migration
             $table->unsignedInteger('commentable_id');
             $table->string('commentable_type');
             // count
-            $table->unsignedInteger('count_likes')->default(0);
-            $table->unsignedInteger('count_replies')->default(0);
+            $table->integer('count_likes')->default(0);
+            $table->integer('count_replies')->default(0);
 
             $table->timestamps();
         });

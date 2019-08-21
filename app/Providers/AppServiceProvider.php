@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Helpers\QiniuAdapter;
+use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
 use League\Flysystem\Filesystem;
@@ -22,6 +23,13 @@ class AppServiceProvider extends ServiceProvider
         foreach (glob(app_path() . '/Helpers/*/*.php') as $filename) {
             require_once $filename;
         }
+
+        Relation::morphMap([
+            'users'    => 'App\User',
+            'replies'  => 'App\Reply',
+            'articles' => 'App\Article',
+            'comments' => 'App\Comment',
+        ]);
     }
 
     /**

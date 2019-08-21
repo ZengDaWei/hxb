@@ -16,11 +16,12 @@ class CreateRepliesTable extends Migration
         Schema::create('replies', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedInteger('comment_id');
+            $table->string('content');
             // 外键
             $table->unsignedInteger('user_id');
             // count
-            $table->unsignedInteger('count_likes')->default(0);
-            $table->unsignedInteger('count_replies')->default(0);
+            $table->integer('count_likes')->default(0);
+            $table->integer('count_replies')->default(0);
             $table->timestamps();
         });
     }

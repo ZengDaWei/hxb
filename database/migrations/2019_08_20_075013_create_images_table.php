@@ -17,7 +17,7 @@ class CreateImagesTable extends Migration
             $table->bigIncrements('id');
             $table->string('path');
             $table->string('imageable_type');
-            $table->unsignedInteger('imageable_id');
+            $table->integer('imageable_id');
             $table->unsignedInteger('user_id');
             $table->json('json')->comment('存储宽高等属性值');
             $table->timestamps();

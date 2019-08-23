@@ -23,10 +23,10 @@ class CreateArticlesTable extends Migration
             $table->unsignedInteger('status')->default(0)->comment('0- 草稿 1- 发布 2- 精选 3- 冻结');
 
             // count
-            $table->unsignedInteger('count_comment')->default(0)->comment('评论数量');
-            $table->unsignedInteger('count_like')->default(0)->comment('点赞数量');
-            $table->unsignedInteger('count_read')->default(0)->comment('阅读数量');
-            $table->unsignedInteger('count_word')->default(0)->comment('字数');
+            $table->integer('count_comments')->default(0)->comment('评论数量');
+            $table->integer('count_likes')->default(0)->comment('点赞数量');
+            $table->integer('count_reads')->default(0)->comment('阅读数量');
+            $table->integer('count_words')->default(0)->comment('字数');
 
             // 创建时间 和 发布时间 不同
             $table->timestamp('published_at')->nullable()->comment('发布时间');

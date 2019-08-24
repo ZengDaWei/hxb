@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('level')->default(1);
             $table->unsignedInteger('status')->default(0)->comment('0-正常（默认） , 1-冻结');
             $table->string('avatar');
+            $table->integer('gold');
             // count
             $table->unsignedInteger('count_fans')->default(0)->comment('粉丝数');
             $table->unsignedInteger('count_follows')->default(0)->comment('关注用户数');

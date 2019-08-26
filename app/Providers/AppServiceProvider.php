@@ -24,11 +24,18 @@ class AppServiceProvider extends ServiceProvider
             require_once $filename;
         }
 
+        // laravel ide
+        if ($this->app->environment() !== 'production') {
+            $this->app->register(\Barryvdh\LaravelIdeHelper\IdeHelperServiceProvider::class);
+        }
+
         Relation::morphMap([
             'users'    => 'App\User',
             'replies'  => 'App\Reply',
             'articles' => 'App\Article',
             'comments' => 'App\Comment',
+            'likes'    => 'App\Like',
+            'follows'  => 'App\Follow',
         ]);
     }
 

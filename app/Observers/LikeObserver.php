@@ -3,6 +3,7 @@
 namespace App\Observers;
 
 use App\Like;
+use App\Notifications\LikeArticle;
 
 class LikeObserver
 {
@@ -10,7 +11,10 @@ class LikeObserver
     public function created(Like $like)
     {
         $liked = $like->liked;
-        $liked->increment('count_likes');
+        if ($liked instanceof \App\Article) {
+            $liked->user->notify(new LikeArticle($like->user, $liked));
+            $liked->increment('count_likes');
+        }
 
     }
 

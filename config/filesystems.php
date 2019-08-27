@@ -71,6 +71,10 @@ return [
             'bucket' => env('QINIU_BUCKET'),
             'url'    => env('QINIU_URL'),
         ],
+        'admin'  => [
+            'driver' => 'qiniu',
+            'url'    => env('QINIU_URL'),
+        ],
     ],
 
 ];

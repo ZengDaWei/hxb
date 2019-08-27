@@ -15,7 +15,7 @@ class CreateWalletsTable extends Migration
     {
         Schema::create('wallets', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('user_id')->unique()->comment('用户ID');
+            $table->unsignedInteger('user_id')->index()->unique()->comment('用户ID');
             $table->string('account', 60)->comment('账号');
             $table->string('real_name', 50)->comment('真实姓名 支持10个中文符号 此处50个长度方便扩展');
             $table->timestamps();

@@ -10,11 +10,7 @@ use League\Flysystem\Filesystem;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
+
     public function register()
     {
         foreach (glob(app_path() . '/Helpers/*.php') as $filename) {
@@ -30,20 +26,17 @@ class AppServiceProvider extends ServiceProvider
         }
 
         Relation::morphMap([
-            'users'    => 'App\User',
-            'replies'  => 'App\Reply',
-            'articles' => 'App\Article',
-            'comments' => 'App\Comment',
-            'likes'    => 'App\Like',
-            'follows'  => 'App\Follow',
+            'users'        => 'App\User',
+            'replies'      => 'App\Reply',
+            'articles'     => 'App\Article',
+            'comments'     => 'App\Comment',
+            'likes'        => 'App\Like',
+            'follows'      => 'App\Follow',
+            'like_article' => 'App\Notifications\LikeArticle',
+            'follow_user'  => 'App\Notifications\FollowUser',
         ]);
     }
 
-    /**
-     * Bootstrap any application services.
-     *
-     * @return void
-     */
     public function boot()
     {
         // 注册七牛云存储驱动

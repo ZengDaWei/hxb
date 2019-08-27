@@ -11,7 +11,7 @@ class CreateRecordsTable extends Migration
     {
         Schema::create('records', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedInteger('user_id');
+            $table->unsignedInteger('user_id')->index();
             $table->integer('action');
             $table->unsignedInteger('rmb');
             $table->unsignedInteger('rate')->comment('兑换比率');

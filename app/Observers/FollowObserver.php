@@ -3,14 +3,20 @@
 namespace App\Observers;
 
 use App\Follow;
+use App\Notifications\FollowUser;
 
 class FollowObserver
 {
 
     public function created(Follow $follow)
     {
+
         $followed = $follow->followed;
-        $followed->increment('count_follows');
+        if ($followed instanceof \App\User) {
+            $followed->increment('count_follows');
+            $followed->notify(new FollowUser($follow->user));
+        }
+
     }
 
     public function updated(Follow $follow)

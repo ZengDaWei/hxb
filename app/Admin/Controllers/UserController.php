@@ -15,7 +15,7 @@ class UserController extends AdminController
      *
      * @var string
      */
-    protected $title = 'App\User';
+    protected $title = '用户列表';
 
     /**
      * Make a grid builder.
@@ -72,7 +72,16 @@ class UserController extends AdminController
         $show->field('count_words', __('总字数'));
         $show->field('created_at', __('注册时间'));
         $show->field('updated_at', __('最近更改时间'));
+        $show->articles('总文章', function ($articles) {
+            $articles->resource('/admin/articles');
+            $articles->id();
+            $articles->title();
+            $articles->created_at();
 
+            $articles->filter(function ($filter) {
+                $filter->like('content');
+            });
+        });
         return $show;
     }
 

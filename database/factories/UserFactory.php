@@ -22,6 +22,6 @@ $factory->define(User::class, function (Faker $faker) {
         'email'     => $faker->unique()->safeEmail,
         'password'  => bcrypt('zengxi123'), // password
         'api_token' => Str::random(50),
-        'avatar'    => 'http://image.lollipop.work/storage/842LycI65eKl.png ',
+        'avatar'    => 'https://image.lollipop.work/storage/842LycI65eKl.png ',
     ];
 });

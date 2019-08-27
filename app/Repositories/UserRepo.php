@@ -5,7 +5,7 @@ namespace App\Repositories;
 use App\User;
 use Illuminate\Support\Str;
 
-trait UserRepo
+class UserRepo
 {
     public function createUser($name, $email, $password)
     {

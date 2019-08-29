@@ -28,6 +28,7 @@ class CreateUsersTable extends Migration
             $table->unsignedInteger('count_articles')->default(0)->comment('文章数');
             $table->unsignedInteger('count_likes')->default(0)->comment('被赞数');
             $table->unsignedInteger('count_words')->default(0)->comment('总字数');
+            $table->unsignedInteger('count_videos')->default(0)->comment('总字数');
             $table->rememberToken();
             $table->timestamps();
         });

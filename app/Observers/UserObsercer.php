@@ -7,11 +7,6 @@ use App\User;
 class UserObsercer
 {
 
-    public function creating(User $user)
-    {
-        dd(32321);
-    }
-
     public function created(User $user)
     {
         //

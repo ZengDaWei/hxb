@@ -15,7 +15,7 @@ class CreateArticlesTable extends Migration
     {
         Schema::create('articles', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->integer('code')->default(0)->comment('0- 文字文章 1- 视频文章 ，其他待扩展');
+            $table->integer('code')->default(0)->comment('0- 文字文章，其他待扩展');
             $table->string('title')->index();
             $table->text('content')->nullable();
             $table->string('cover')->nullable();

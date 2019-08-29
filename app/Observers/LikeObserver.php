@@ -12,8 +12,8 @@ class LikeObserver
     {
         $liked = $like->liked;
         if ($liked instanceof \App\Article) {
-            $liked->user->notify(new LikeArticle($like->user, $liked));
             $liked->increment('count_likes');
+            $liked->user->notify(new LikeArticle($like->user, $liked));
         }
 
     }

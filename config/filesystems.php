@@ -64,16 +64,18 @@ return [
             'url'    => env('AWS_URL'),
         ],
         'qiniu'  => [
-            'driver' => 'qiniu',
-            'key'    => env('QINIU_ACCESS_KEY'),
-            'secret' => env('QINIU_SECRET_KEY'),
-            'region' => env('QINIU_DEFAULT_REGION'),
-            'bucket' => env('QINIU_BUCKET'),
-            'url'    => env('QINIU_URL'),
-        ],
-        'admin'  => [
-            'driver' => 'qiniu',
-            'url'    => env('QINIU_URL'),
+            'driver'     => 'qiniu',
+            'domains'    => [
+                'default' => 'image.lollipop.work', //你的七牛域名
+                'https'   => 'image.lollipop.work', //你的HTTPS域名
+                'custom'  => 'static.abc.com', //你的自定义域名
+            ],
+            'access_key' => env('QINIU_ACCESS_KEY'),
+            'secret_key' => env('QINIU_SECRET_KEY'),
+            'region'     => env('QINIU_DEFAULT_REGION'),
+            'bucket'     => env('QINIU_BUCKET'),
+            'url'        => env('QINIU_URL'),
+            'notify_url' => '', //持久化处理回调地址
         ],
     ],
 

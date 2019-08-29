@@ -7,7 +7,9 @@ use App\Comment;
 use App\Observers\ArticleObserver;
 use App\Observers\CommentObserver;
 use App\Observers\ReplyObserver;
+use App\Observers\UserObsercer;
 use App\Reply;
+use App\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -37,5 +39,6 @@ class EventServiceProvider extends ServiceProvider
         Article::observe(ArticleObserver::class);
         Comment::observe(CommentObserver::class);
         Reply::observe(ReplyObserver::class);
+        User::observe(UserObsercer::class);
     }
 }

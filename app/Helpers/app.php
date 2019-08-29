@@ -1,16 +1,23 @@
 <?php
 
-use Illuminate\Support\Str;
-
-function UploadFile($file): String
+function getUser()
 {
-    if ($file->isValid()) {
-        $entension = '.' . $file->getClientOriginalExtension();
-        $fileName  = Str::random(12) . $entension;
-        if (Storage::disk('qiniu')->write($fileName, $file)) {
-            return 'http://image.lollipop.work/storage/' . $fileName;
-        }
-        return '上传图片失败';
+    if (Auth::check()) {
+        return Auth::user();
     }
-    return '文件不合法';
+
+    if (auth('api')->user()) {
+        return auth('api')->user();
+    }
+
+    $user = session('user');
+    if (!$user) {
+        if ($user = request()->user()) {
+            return $user;
+        }
+        if ($token = request()->api_token) {
+            return \App\User::where('api_token', $token)->first();
+        }
+    }
+    return null;
 }

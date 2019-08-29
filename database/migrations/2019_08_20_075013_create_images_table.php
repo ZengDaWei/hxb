@@ -16,8 +16,6 @@ class CreateImagesTable extends Migration
         Schema::create('images', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('path');
-            $table->string('imageable_type');
-            $table->integer('imageable_id')->index();
             $table->unsignedInteger('user_id');
             $table->json('json')->comment('存储宽高等属性值');
             $table->timestamps();

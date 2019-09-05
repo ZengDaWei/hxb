@@ -64,18 +64,18 @@ return [
             'url'    => env('AWS_URL'),
         ],
         'qiniu'  => [
-            'driver'     => 'qiniu',
-            'domains'    => [
+            'driver'                 => 'qiniu',
+            'domains'                => [
                 'default' => 'image.lollipop.work', //你的七牛域名
                 'https'   => 'image.lollipop.work', //你的HTTPS域名
-                'custom'  => 'static.abc.com', //你的自定义域名
+                'custom'  => 'static.abc.com', //Useless 没啥用，请直接使用上面的 default 项
             ],
-            'access_key' => env('QINIU_ACCESS_KEY'),
-            'secret_key' => env('QINIU_SECRET_KEY'),
-            'region'     => env('QINIU_DEFAULT_REGION'),
-            'bucket'     => env('QINIU_BUCKET'),
-            'url'        => env('QINIU_URL'),
-            'notify_url' => '', //持久化处理回调地址
+            'access_key'             => 'PPvfCB1XhwKKWhnFUAYeDotvZ9jDV_Z0w4al2nKp', //AccessKey
+            'secret_key'             => 'ppwo05s9QAPupEVzKbJXzayyNv7-exjgp7NfyDw5', //SecretKey
+            'bucket'                 => 'health', //Bucket名字
+            'notify_url'             => '', //持久化处理回调地址
+            'access'                 => 'public', //空间访问控制 public 或 private
+            'hotlink_prevention_key' => null, // CDN 时间戳防盗链的 key。 设置为 null 则不启用本功能。
         ],
     ],
 

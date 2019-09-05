@@ -15,7 +15,8 @@
         "laravel/tinker": "^1.0",
         "mll-lab/laravel-graphql-playground": "^1.1",
         "nuwave/lighthouse": "3.7",
-        "qiniu/php-sdk": "^7.2"
+        "php-ffmpeg/php-ffmpeg": "^0.14.0",
+        "zgldh/qiniu-laravel-storage": "^0.10.3"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.6",

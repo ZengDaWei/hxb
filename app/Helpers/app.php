@@ -21,3 +21,31 @@ function getUser()
     }
     return null;
 }
+
+function getFileUrl($path)
+{
+    if (startsWith('storage')) {
+        return getUrl() . $path;
+    }
+
+}
+
+function getUrl()
+{
+    return 'https://image.lollipop.work/';
+}
+
+function getPath($path)
+{
+    return substr($path, stripos($path, 'storage'));
+}
+
+function getFFMpeg()
+{
+    $path = [
+        'ffmpeg.binaries'  => config('ffmpeg.ffmpeg.binaries'),
+        'ffprobe.binaries' => config('ffmpeg.ffprobe.binaries'),
+    ];
+
+    return FFMpeg\FFMpeg::create($path);
+}

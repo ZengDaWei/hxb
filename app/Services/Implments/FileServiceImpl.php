@@ -3,39 +3,73 @@
 namespace App\Services\Implments;
 
 use App\Image;
+use App\Services\FileService;
+use App\Video;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class FileServiceImpl implements FileService
 {
-    public function saveImagetoQiniu($file)
+    public function saveImagetoQiniu($file): Image
     {
         if ($user = getUser()) {
             // 判断是否已经存在此图
-            $hash  = md5_file($file);
+            $path  = $file->getRealPath();
+            $hash  = md5_file($path);
             $image = Image::firstOrNew(['json->hash' => $hash]);
-            if ($image->id != null) {
+            if ($image->id) {
+                $image->touch();
                 return $image;
             }
-            $path = saveFile($file);
+            $cdn_path = $this->saveFile($file);
+            $image->setImageInfo($cdn_path);
             // 获取相对路径
-            $real_path = substr($path, stripos($path, 'storage'));
-
+            $real_path   = getPath($cdn_path);
+            $image->path = $real_path;
+            // 保存到 db
+            $image->user_id = $user->id;
+            $image->save();
+            return $image;
         }
+        return null;
 
     }
-    public function saveVideotoQiniu($file)
+    public function saveVideotoQiniu($video)
     {
-
-    }
-    public function saveFile($file)
-    {
-        if ($file->isValid()) {
-            $entension = '.' . $file->getClientOriginalExtension();
-            $fileName  = Str::random(12) . $entension;
-            if (Storage::disk('qiniu')->write($fileName, $file)) {
-                return 'https://image.lollipop.work/storage/' . $fileName;
+        Auth::loginUsingId(1);
+        if ($user = getUser()) {
+            // 判断是否存在此视频
+            $path  = $video->getRealPath();
+            $hash  = md5_file($path);
+            $video = Video::firstOrNew(['json->hash' => $hash]);
+            if ($video->id) {
+                $video->touch();
+                return $video;
             }
-            return '上传图片失败';
+            $cdn_path = $this->saveFile($video);
+
+            $ffmpeg = getFFMpeg();
+            $video  = $ffmpeg->open($path);
+            //提取第一秒的图像
+            $frame    = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(1));
+            $fileName = Str::random(12) . '.jpg';
+            if (!is_dir(storage_path("storage/video"))) {
+                mkdir(storage_path("storage/video"), 0777);
+            }
+            $frame->save(storage_path($fileName));
+            $image = $this->saveImagetoQiniu(storage_path($fileName));
+            dd($image);
         }
-        return '文件不合法';
+    }
+
+    public function saveFile($file): string
+    {
+        $entension = '.' . $file->getClientOriginalExtension();
+        $fileName  = 'storage/' . Str::random(12) . $entension;
+        if (Storage::disk('qiniu')->write($fileName, file_get_contents($file->getRealPath()))) {
+            return 'https://image.lollipop.work/' . $fileName;
+        }
+        return 'faild';
     }
 }

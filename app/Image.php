@@ -25,10 +25,13 @@ class Image extends Model
     public function setImageInfo($path)
     {
         if ($image = getimagesize($path)) {
-            $weight = $image["0"];
+            $width  = $image["0"];
             $height = $image["1"];
-            $this->setJsonData('weight', $weight);
+            $hash   = md5_file($path);
+            $this->setJsonData('width', $width);
             $this->setJsonData('height', $height);
+            $this->setJsonData('hash', $hash);
         }
+
     }
 }

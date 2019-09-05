@@ -3,7 +3,6 @@
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
 use App\User;
 use Faker\Generator as Faker;
-use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,10 +17,9 @@ use Illuminate\Support\Str;
 
 $factory->define(User::class, function (Faker $faker) {
     return [
-        'name'      => $faker->name,
-        'email'     => $faker->unique()->safeEmail,
-        'password'  => bcrypt('zengxi123'), // password
-        'api_token' => Str::random(50),
-        'avatar'    => 'https://image.lollipop.work/storage/842LycI65eKl.png ',
+        'name'     => $faker->name,
+        'email'    => $faker->unique()->safeEmail,
+        'password' => bcrypt('zengxi123'), // password
+        'avatar'   => 'https://image.lollipop.work/storage/842LycI65eKl.png ',
     ];
 });

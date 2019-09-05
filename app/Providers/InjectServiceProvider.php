@@ -18,5 +18,6 @@ class InjectServiceProvider extends ServiceProvider
         $this->app->bind(\App\Repositories\UserRepo::class);
         // service
         $this->app->bind(\App\Services\UserService::class, \App\Services\Implments\UserServiceImpl::class);
+        $this->app->bind(\App\Services\FileService::class, \App\Services\Implments\FileServiceImpl::class);
     }
 }

@@ -2,11 +2,8 @@
 
 namespace App\Providers;
 
-use App\Helpers\QiniuAdapter;
 use Illuminate\Database\Eloquent\Relations\Relation;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\ServiceProvider;
-use League\Flysystem\Filesystem;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -39,9 +36,6 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        // 注册七牛云存储驱动
-        Storage::extend('qiniu', function ($app, $config) {
-            return new Filesystem(new QiniuAdapter('storage'));
-        });
+        
     }
 }

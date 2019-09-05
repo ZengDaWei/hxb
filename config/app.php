@@ -163,7 +163,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
 
         // qiniu
-
+        zgldh\QiniuStorage\QiniuFilesystemServiceProvider::class,
         /*
          * Package Service Providers...
          */

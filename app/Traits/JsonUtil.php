@@ -21,9 +21,15 @@ trait JsonUtil
 
     public function setJsonData($key, $value)
     {
-        $data       = $this->jsonData();
+        $data       = $this->getJsonData();
         $data[$key] = $value;
         $this->json = json_encode($data, JSON_UNESCAPED_UNICODE);
-        $this->save();
+    }
+
+    public function delJsonData($key)
+    {
+        $data = $this->getJsonData();
+        unset($data[$key]);
+        $this->json = json_encode($data, JSON_UNESCAPED_UNICODE);
     }
 }

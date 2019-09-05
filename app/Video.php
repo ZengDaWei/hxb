@@ -13,6 +13,7 @@ class Video extends Model
         'user_id',
         'json',
         'description',
+        'path',
     ];
 
     public function user(): BelongsTo

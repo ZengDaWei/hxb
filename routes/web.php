@@ -1,12 +1,15 @@
 <?php
 
-use Illuminate\Http\Request;
-
 Route::get('/', function () {
-    $index = stripos('https://image.lollipop.work/storage/62nYRRZt5uDNzAP.png', 'storage');
-    echo substr('https://image.lollipop.work/storage/62nYRRZt5uDNzAP.png', $index);
+    $path = [
+        'ffmpeg.binaries'  => '/usr/bin/ffmpeg',
+        'ffprobe.binaries' => '/usr/bin/ffprobe',
+    ];
+
+    $ffmpeg = FFMpeg\FFMpeg::create($path);
+    $video  = $ffmpeg->open('/home/aria/Downloads/66.mp4');
+    $frame  = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(1)); //提取第几秒的图像
+    $frame->save(storage_path('image.jpg'));
 });
 
-Route::get('/file', function (Request $request) {
-
-});
+Route::post('/file', 'FileController@store');

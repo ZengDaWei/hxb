@@ -2,10 +2,8 @@
 
 namespace App\Services;
 
-use App\Image;
-
 interface FileService
 {
-    public function saveImagetoQiniu($file): Image;
+    public function saveImagetoQiniu($file);
     public function saveVideotoQiniu($video);
 }

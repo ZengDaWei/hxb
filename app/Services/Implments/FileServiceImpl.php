@@ -5,14 +5,17 @@ namespace App\Services\Implments;
 use App\Image;
 use App\Services\FileService;
 use App\Video;
+use FFMpeg\Coordinate\TimeCode;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class FileServiceImpl implements FileService
 {
-    public function saveImagetoQiniu($file): Image
+    public function saveImagetoQiniu($file)
     {
+        Auth::loginUsingId(1);
         if ($user = getUser()) {
             // 判断是否已经存在此图
             $path  = $file->getRealPath();
@@ -35,38 +38,44 @@ class FileServiceImpl implements FileService
         return null;
 
     }
-    public function saveVideotoQiniu($video)
+    public function saveVideotoQiniu($file)
     {
         Auth::loginUsingId(1);
         if ($user = getUser()) {
             // 判断是否存在此视频
-            $path  = $video->getRealPath();
+            $path  = $file->getRealPath();
             $hash  = md5_file($path);
             $video = Video::firstOrNew(['json->hash' => $hash]);
             if ($video->id) {
                 $video->touch();
                 return $video;
             }
-            $cdn_path = $this->saveFile($video);
-
-            $ffmpeg = getFFMpeg();
-            $video  = $ffmpeg->open($path);
+            $cdn_path  = $this->saveFile($file);
+            $real_path = getPath($cdn_path);
+            $ffmpeg    = getFFMpeg();
+            $ffm_video = $ffmpeg->open($path);
             //提取第一秒的图像
-            $frame    = $video->frame(FFMpeg\Coordinate\TimeCode::fromSeconds(1));
-            $fileName = Str::random(12) . '.jpg';
-            if (!is_dir(storage_path("storage/video"))) {
-                mkdir(storage_path("storage/video"), 0777);
+            $frame    = $ffm_video->frame(TimeCode::fromSeconds(1));
+            $fileName = 'video/' . Str::random(12) . '.jpg';
+            if (!is_dir(storage_path("video"))) {
+                mkdir(storage_path("video"), 0777);
             }
             $frame->save(storage_path($fileName));
-            $image = $this->saveImagetoQiniu(storage_path($fileName));
-            dd($image);
+            $image = $this->saveImagetoQiniu(new UploadedFile(storage_path($fileName), 'file.jpg'));
+
+            // db
+            $video->path    = $real_path;
+            $video->user_id = $user->id;
+            $video->setVideoInfo($image->path, $image->getJsonData('width'), $image->getJsonData('height'));
+            $video->save();
         }
     }
 
     public function saveFile($file): string
     {
         $entension = '.' . $file->getClientOriginalExtension();
-        $fileName  = 'storage/' . Str::random(12) . $entension;
+        info($entension);
+        $fileName = 'storage/' . Str::random(12) . $entension;
         if (Storage::disk('qiniu')->write($fileName, file_get_contents($file->getRealPath()))) {
             return 'https://image.lollipop.work/' . $fileName;
         }

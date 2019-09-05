@@ -37,6 +37,7 @@ function getUrl()
 
 function getPath($path)
 {
+    info($path);
     return substr($path, stripos($path, 'storage'));
 }
 

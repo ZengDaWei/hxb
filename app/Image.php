@@ -17,6 +17,10 @@ class Image extends Model
         'path',
     ];
 
+    protected $cast = [
+        'json' => 'array',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);

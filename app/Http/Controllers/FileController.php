@@ -30,9 +30,8 @@ class FileController extends Controller
         if (!$request->hasFile('file') || !$request->file('file')->isValid()) {
             return '上传的文件不合法';
         }
-
-        $file   = $request->file('file');
-        $result = $this->fileSerivce->saveImagetoQiniu($file);
+        $file = $request->file('file');
+        $this->fileSerivce->saveVideotoQiniu($file);
     }
 
     public function show($id)

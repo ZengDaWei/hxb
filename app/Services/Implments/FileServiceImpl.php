@@ -2,10 +2,10 @@
 
 namespace App\Services\Implments;
 
+use App\Helpers\FFMpegUtil;
 use App\Image;
 use App\Services\FileService;
 use App\Video;
-use FFMpeg\Coordinate\TimeCode;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
@@ -13,11 +13,12 @@ use Illuminate\Support\Str;
 
 class FileServiceImpl implements FileService
 {
+
     public function saveImagetoQiniu($file)
     {
         Auth::loginUsingId(1);
         if ($user = getUser()) {
-            // 判断是否已经存在此图
+            // 1.判断是否已经存在此图
             $path  = $file->getRealPath();
             $hash  = md5_file($path);
             $image = Image::firstOrNew(['json->hash' => $hash]);
@@ -26,11 +27,12 @@ class FileServiceImpl implements FileService
                 return $image;
             }
             $cdn_path = $this->saveFile($file);
+            // 2. 保存到云
             $image->setImageInfo($cdn_path);
-            // 获取相对路径
+            // 3.获取相对路径
             $real_path   = getPath($cdn_path);
             $image->path = $real_path;
-            // 保存到 db
+            // 4.保存到 db
             $image->user_id = $user->id;
             $image->save();
             return $image;
@@ -42,7 +44,8 @@ class FileServiceImpl implements FileService
     {
         Auth::loginUsingId(1);
         if ($user = getUser()) {
-            // 判断是否存在此视频
+
+            // 1.判断是否存在此视频
             $path  = $file->getRealPath();
             $hash  = md5_file($path);
             $video = Video::firstOrNew(['json->hash' => $hash]);
@@ -50,23 +53,27 @@ class FileServiceImpl implements FileService
                 $video->touch();
                 return $video;
             }
-            $cdn_path  = $this->saveFile($file);
-            $real_path = getPath($cdn_path);
-            $ffmpeg    = getFFMpeg();
-            $ffm_video = $ffmpeg->open($path);
-            //提取第一秒的图像
-            $frame    = $ffm_video->frame(TimeCode::fromSeconds(1));
-            $fileName = 'video/' . Str::random(12) . '.jpg';
-            if (!is_dir(storage_path("video"))) {
-                mkdir(storage_path("video"), 0777);
-            }
-            $frame->save(storage_path($fileName));
-            $image = $this->saveImagetoQiniu(new UploadedFile(storage_path($fileName), 'file.jpg'));
 
-            // db
-            $video->path    = $real_path;
+            // 2.保存到 云
+            $cdn_path = $this->saveFile($file);
+            $db_path  = getPath($cdn_path);
+
+            // 3.获取截图
+            $fileName = FFMpegUtil::getCover($path, 1);
+            $image    = $this->saveImagetoQiniu(new UploadedFile(storage_path($fileName), 'file.jpg'));
+
+            //4.设置视频信息
+            $data     = [];
+            $data     = FFMpegUtil::getVideoInfo($path);
+            $duration = array_get($data, 'duration');
+            $duration = $duration > 0 ? ceil($duration) : $duration;
+
+            $video->path    = $db_path;
             $video->user_id = $user->id;
-            $video->setVideoInfo($image->path, $image->getJsonData('width'), $image->getJsonData('height'));
+            $video->setJsonData('width', array_get($data, 'width'));
+            $video->setJsonData('height', array_get($data, 'height'));
+            $video->duration = $duration;
+            $video->setJsonData('cover', $image->path);
             $video->save();
         }
     }
@@ -81,4 +88,5 @@ class FileServiceImpl implements FileService
         }
         return 'faild';
     }
+
 }

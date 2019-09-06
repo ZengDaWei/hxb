@@ -17,6 +17,7 @@ class CreateVideosTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedInteger('user_id')->index();
             $table->string('path');
+            $table->integer('duration');
             $table->json('json');
             $table->string('description')->nullable();
             $table->unsignedInteger('count_likes')->default(0);

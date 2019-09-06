@@ -36,6 +36,27 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        
+        $this->registerSingleObject();
+    }
+    public function registerSingleObject()
+    {
+        // register ffmpeg and ffprobe
+        $this->app->singleton('ffmpeg', function ($app) {
+            return \FFMpeg\FFMpeg::create([
+                'ffmpeg.binaries'  => [
+                    exec('which ffmpeg'),
+                ],
+                'ffprobe.binaries' => [
+                    exec('which ffprobe'),
+                ],
+            ]);
+        });
+        $this->app->singleton('ffprobe', function ($app) {
+            return \FFMpeg\FFProbe::create([
+                'ffprobe.binaries' => [
+                    exec('which ffprobe'),
+                ],
+            ]);
+        });
     }
 }

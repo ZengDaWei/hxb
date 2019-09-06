@@ -27,7 +27,6 @@ class FFMpegUtil
             mkdir(storage_path("video"), 0777);
         }
         $frame->save(storage_path($fileName));
-
         return $fileName;
     }
 }

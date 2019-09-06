@@ -72,6 +72,7 @@ class FileServiceImpl implements FileService
             $video->user_id = $user->id;
             $video->setJsonData('width', array_get($data, 'width'));
             $video->setJsonData('height', array_get($data, 'height'));
+            $video->setJsonData('size', Storage::disk('qiniu')->size($video->path));
             $video->duration = $duration;
             $video->setJsonData('cover', $image->path);
             $video->save();
